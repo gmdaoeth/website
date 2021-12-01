@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+@font-face {
+  font-family: "gm";
+  src: local("gm"), url(./fonts/georgia.ttf) format("truetype");
+}
+
+.react-p5 {
+  position: absolute;
+  z-index: 0;
+}
