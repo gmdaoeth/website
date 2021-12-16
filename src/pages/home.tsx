@@ -20,7 +20,8 @@ const Night = 1;
 const Home = () => {
   const [mode, setMode] = useState(Morning);
 
-  const changeMode = () => {
+  const changeMode = (event: any) => {
+    event.preventDefault();
     setMode(mode === Morning ? Night : Morning);
   };
 
@@ -41,7 +42,11 @@ const Home = () => {
                     "text-[3rem] leading-[3rem] md:text-[6rem] md:leading-[6rem] lg:text-[12rem] lg:leading-[12rem] font-semibold text-shadow-md font-serif align-middle"
                   )}
                 >
-                  <TextTransition text={mode === Morning ? "gm." : "gn."} springConfig={presets.molasses} />
+                  <TextTransition
+                    className="select-none"
+                    text={mode === Morning ? "gm." : "gn."}
+                    springConfig={presets.molasses}
+                  />
                 </div>
               </div>
               <img className=" object-contain" src={mode === Morning ? boxImg : boxImgDark} />
