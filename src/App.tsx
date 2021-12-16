@@ -1,5 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/home";
+import Soon from "./pages/soon";
 import { SocialIcon } from "react-social-icons";
 
 function App() {
@@ -7,7 +8,8 @@ function App() {
     <div className="w-full min-h-full text-gray-50">
       <main className="w-full min-h-full pb-12">
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Soon />} />
+          <Route path="/wip" element={<Home />} />
         </Routes>
       </main>
       <footer className="bg-black text-white text-center py-24">
