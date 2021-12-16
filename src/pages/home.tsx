@@ -1,25 +1,50 @@
+import { useEffect, useState } from "react";
+import TextTransition, { presets } from "react-text-transition";
+
 import Header from "../components/layout/header";
 
 import tokenImg from "./images/gm1.jpeg";
 import boxImg from "./images/box.png";
+import boxImgDark from "./images/box-dark.png";
 import heroimg from "./images/fjall.png";
 
 const bgImageUrl = `url('${heroimg}')`;
 
+const classnames = function (...args: string[]) {
+  return args.filter(Boolean).join(" ");
+};
+
+const Morning = 0;
+const Night = 1;
+
 const Home = () => {
+  const [mode, setMode] = useState(Morning);
+
+  const changeMode = () => {
+    setMode(mode === Morning ? Night : Morning);
+  };
+
   return (
     <div>
       <div className="bg-cover bg-no-repeat drop-shadow-md" style={{ backgroundImage: bgImageUrl }}>
         <Header />
         <div className="max-w-7xl h-full mx-auto pb-20 sm:px-6 lg:px-8 text-center">
           <div className="text-gray-50 h-4/5 mt-12">
-            <div className="max-h-[128px] md:max-h-[256px] lg:max-h-[512px] flex justify-center relative">
+            <div
+              className="max-h-[128px] md:max-h-[256px] lg:max-h-[512px] flex justify-center relative"
+              onClick={changeMode}
+            >
               <div className="absolute top-[32px] md:top-[64px] lg:top-[128px] flex">
-                <p className="text-[3rem] leading-[3rem] md:text-[6rem] md:leading-[6rem] lg:text-[12rem] lg:leading-[12rem] font-semibold text-shadow-md font-serif align-middle">
-                  gm.
-                </p>
+                <div
+                  className={classnames(
+                    mode === Morning ? "text-gray-50" : "text-black",
+                    "text-[3rem] leading-[3rem] md:text-[6rem] md:leading-[6rem] lg:text-[12rem] lg:leading-[12rem] font-semibold text-shadow-md font-serif align-middle"
+                  )}
+                >
+                  <TextTransition text={mode === Morning ? "gm." : "gn."} springConfig={presets.molasses} />
+                </div>
               </div>
-              <img className=" object-contain" src={boxImg} />
+              <img className=" object-contain" src={mode === Morning ? boxImg : boxImgDark} />
             </div>
             <p className="mt-8">A Decentralised Autonomous Organization</p>
           </div>
