@@ -11,7 +11,8 @@ type NavItem = {
 const navigation: NavItem[] = [
   { name: "About", href: "#about" },
   { name: "Token", href: "#token" },
-  { name: "Studio", href: "https://studio.gmdao.ai", external: true },
+  // { name: "Studio", href: "https://studio.gmdao.ai", external: true },
+  { name: "Studio", href: "#projects" },
 ];
 
 const Header = () => {

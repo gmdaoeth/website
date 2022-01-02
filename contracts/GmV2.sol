@@ -211,6 +211,10 @@ contract GmV2 is ERC721, IERC1155Receiver, IERC2981, Ownable, ReentrancyGuard {
         return baseTokenURI;
     }
 
+    function getAvailableMintsForAddress(address addr) public view returns (uint256) {
+        return _sentV1Tokens[addr];
+    }
+
     /**
      * @dev See {IERC721Metadata-tokenURI}.
      */
