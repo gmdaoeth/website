@@ -7,6 +7,8 @@ import tokenImg from "./images/gm1.jpeg";
 import boxImg from "./images/box.png";
 import boxImgDark from "./images/box-dark.png";
 import heroimg from "./images/fjall.png";
+import { Link } from "react-router-dom";
+import BrandButton from "../components/button";
 
 const bgImageUrl = `url('${heroimg}')`;
 
@@ -56,56 +58,66 @@ const Home = () => {
         </div>
       </div>
       <div id="about" className="max-w-6xl mx-auto py-6 pt-12 text-gray-800">
-        <h1 className="text-2xl pb-6 font-semibold">
-          Supporting established and upcoming artists by providing a launchpad for their work
-        </h1>
+        <h1 className="text-2xl pb-6 font-semibold">The DAO</h1>
         <div className="space-y-4">
-          <p className="text-lg">
-            With our platform we provide an end-to-end service where everything is managed, from smart contract
-            deployment, marketing & revenue generation, as an out of the box solution.
-          </p>
-          <p>
-            Each body of work will be treated as unique scope of work & we strike to deliver an completely tailored
-            experience to match you vision, whether that be 1/1’s or collection of 10,000 pieces. Occaecati sit fugiat
-            qui mollitia. Iste odio consequatur perspiciatis eos. Voluptatum repudiandae dolorum similique id eaque
-            voluptatum totam praesentium. Molestiae laboriosam sed repudiandae aperiam maiores minima accusantium illo
-            sint. Et sed et velit est ea molestias corrupti. Sint nesciunt architecto libero deserunt eaque.
-          </p>
+          <Para>
+            The gmDAO is a community of NFT collectors, artists & investors created in September 2021 using a fair token
+            distribution. Broadly speaking, the DAO was formed based on the principles of etiquette and mutual respect,
+            making our community a haven within a typically hostile environment. This ultimately resulted in an
+            extremely passionate & engaged member base which we are extremely proud of.
+          </Para>
+          <Para>
+            Structurally the DAO consists of 900 members, the majority active within NFT sector, with backgrounds
+            ranging from accredited investors, to renowned generative artists with collections featured on ArtBlocks
+            curated.
+          </Para>
 
-          <p>
-            Dolorum distinctio alias voluptatibus fugit. Voluptas accusamus sapiente quas voluptatum magni sit numquam
-            quisquam. Excepturi officiis cupiditate error id temporibus at quis. Consectetur labore necessitatibus atque
-            sequi nulla odio corporis voluptatem ab. Cum accusantium natus est incidunt exercitationem dignissimos sunt.
-            Nemo excepturi quo.
-          </p>
+          <Para>
+            Our primary goal is to foster & encourage the development of the NFT space, whether through our own organic
+            marketing, seed funding from our treasury or development from within the DAO itself. We also seek to provide
+            an edge to our members though information not freely available to the market. Lastly, the gmDAO will launch
+            a number of internally managed projects that will act as a revenue source for the community, with our first
+            venture set to launch in January 2022.
+          </Para>
 
-          <p>
-            A aut laborum non laudantium voluptas et est aliquam. Vero numquam harum aperiam blanditiis perspiciatis
-            eveniet debitis blanditiis officiis. Optio dolore qui earum sapiente qui asperiores pariatur. Quia impedit
-            aperiam accusamus occaecati voluptates provident molestias. Corrupti voluptatem praesentium qui quae
-            suscipit maiores quas necessitatibus. Officiis cum soluta et nihil nemo laudantium.
-          </p>
-        </div>
-        <div className="my-8">
-          <BrandButton text="Apply for the studio" />
+          <Para>You can learn more about our journey in recent Medium articles linked below.</Para>
+          <div>
+            <a href="https://gmdao.medium.com/gm-7925b2d899e2" target="_blank">
+              <BrandButton text="Read the articles" />
+            </a>
+          </div>
         </div>
         <Divider text={"gm"} />
         <h1 id="token" className="text-2xl pb-6 font-semibold">
           The token
         </h1>
-        <div className="space-y-4">
+        <div>
           <div className="grid grid-cols-2 gap-8">
-            <div>
-              <p className="text-lg">
-                To build this community, we created a token. Currently built upon the Rarible platform, and soon to be
-                migrated to our own propritary contract, the token will act as your way to gain entry. Beyond that, it
-                also give each holder the right to vote on how the comunity evolves & spends funds from the gmDAO.
-                Officia id nisi temporibus hic. Voluptatem soluta occaecati tenetur maxime nihil alias deleniti. Aperiam
-                eos repudiandae consequatur libero officiis deleniti. Autem ipsa soluta iure et.
-              </p>
+            <div className="space-y-4">
+              <Para>
+                The gm. token is the key to gain access to our private community, but also acts as a governance token
+                which entitles the holder to vote & propose the direction of the DAO. It also entitles the owner to a
+                revenue share in funds generated by the DAO.
+              </Para>
+
+              <Para>
+                1000 were initially minted & distributed using a “fair-drop” method, where 10 tokens were allocated
+                through daily challenges over the course of 100 days, with any unclaimed tokens on each day being
+                burned. This resulted in a final tally of 900 tokens currently in circulation, with a number being
+                retained by the treasury.
+              </Para>
+
+              <Para>
+                gm. tokens can currently only be purchased via the secondary market, linked below, or through community
+                programs which will begin early 2022.
+              </Para>
               <div className="my-8 flex space-x-4">
-                <BrandButton text="Get a token" />
-                <BrandButton text="Migrate to V2" />
+                <a href="https://opensea.io/assets/0xd07dc4262bcdbf85190c01c996b4c06a461d2430/706480" target="_blank">
+                  <BrandButton text="Get a token" />
+                </a>
+                <Link to="/migrate-info">
+                  <BrandButton text="Migrate to V2" />
+                </Link>
               </div>
             </div>
             <div className="w-full">
@@ -114,34 +126,28 @@ const Home = () => {
           </div>
         </div>
         <Divider text={"ge"} />
-        <h1 className="text-2xl pb-6 font-semibold">The team</h1>
-        <p>
-          Coalescing from across various timezones the gm leadership works to curate experiences and accessibility
-          throughout the platform. Comprised of various backrounds throughout technology and artistic circles we
-          Voluptatem soluta occaecati tenetur maxime nihil alias deleniti. Aperiam eos repudiandae consequatur libero
-          officiis deleniti. Autem ipsa soluta iure et.
-        </p>
-        <div className="grid grid-cols-4 gap-8 my-8">
-          <Profile name="Cyphr" title="Benevolent Dictator" image={tokenImg}>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Et voluptatem saepe, nesciunt veniam culpa omnis
-            praesentium molestias nemo sit. Odio praesentium atque impedit asperiores pariatur commodi a in expedita
-            dolore.
-          </Profile>
-          <Profile name="Cyphr" title="Benevolent Dictator" image={tokenImg}>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Et voluptatem saepe, nesciunt veniam culpa omnis
-            praesentium molestias nemo sit. Odio praesentium atque impedit asperiores pariatur commodi a in expedita
-            dolore.
-          </Profile>
-          <Profile name="Cyphr" title="Benevolent Dictator" image={tokenImg}>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Et voluptatem saepe, nesciunt veniam culpa omnis
-            praesentium molestias nemo sit. Odio praesentium atque impedit asperiores pariatur commodi a in expedita
-            dolore.
-          </Profile>
-          <Profile name="Cyphr" title="Benevolent Dictator" image={tokenImg}>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Et voluptatem saepe, nesciunt veniam culpa omnis
-            praesentium molestias nemo sit. Odio praesentium atque impedit asperiores pariatur commodi a in expedita
-            dolore.
-          </Profile>
+        <h1 id="projects" className="text-2xl pb-6 font-semibold">
+          Our work
+        </h1>
+        <div className="space-y-8">
+          <Para>
+            As part of the overall mission of the DAO, we have set out to develop a number of internal initiatives which
+            we feel is currently lacking from the NFT ecosystem. These projects are wholly owned and created using
+            resources within the community & will serve as our primary mechanism to generate treasury funds.
+          </Para>
+          <div className="bg-gray-900 rounded-md p-8 text-white shadow-lg">
+            <div className="text-3xl">1. gm. studio</div>
+            <div className="text-sm text-gray-300 mb-8">Launching circa Jan 2022</div>
+            <div className="space-y-4">
+              <Para>
+                Generative art launchpad built by artists for artists. We provide equal opportunity to each and every
+                submission with clear & honest feedback provided directly from our curation panel. We’ve built the
+                studio from the ground up using our experience with existing artistic platforms and the challenges they
+                present to new artists, namely; extremely long queues & poor communication.
+              </Para>
+              <Para>Our approach is clear & transparent, with fees & timelines presented upfront.</Para>
+            </div>
+          </div>
         </div>
         <Divider text={"gn"} />
       </div>
@@ -159,14 +165,6 @@ const Divider = ({ text }: { text: string }) => {
         <span className="px-2 bg-white text-sm text-gray-500">{text}</span>
       </div>
     </div>
-  );
-};
-
-const BrandButton = ({ text }: { text: string }) => {
-  return (
-    <button className="bg-gray-800 hover:bg-gray-900 text-white py-3 px-4 rounded-sm focus:outline-none focus:shadow-outline">
-      {text}
-    </button>
   );
 };
 
@@ -195,3 +193,7 @@ const Profile = (props: ProfileProps) => {
 };
 
 export default Home;
+
+const Para = ({ children }: { children: React.ReactNode }) => {
+  return <p className="leading-relaxed">{children}</p>;
+};
