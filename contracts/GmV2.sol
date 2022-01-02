@@ -48,9 +48,9 @@ contract GmV2 is ERC721, IERC1155Receiver, IERC2981, Ownable, ReentrancyGuard {
     uint256 public raribleTokenId = 706480; // gm v1 token id on shared Rarible contract
     address public gmDAOAddress = 0xD18e205b41eEe3D208D3B10445DB95Ff02ba4acA; // gmdao.eth
     uint256 public royaltyPercent = 90; // 90%
-    uint256 public maxSupply = 899;
-    uint256 public maxNormalTokens = 836; // v2 tokens that correspond directly to existing v1 tokens
-    uint256 public maxSpecialTokens = 63; // special edition 1/1 tokens that can be created from burned tokens
+    uint256 public maxSupply = 900;
+    uint256 public maxNormalTokens = 870; // v2 tokens that correspond directly to existing v1 tokens
+    uint256 public maxSpecialTokens = 30; // special edition 1/1 tokens that can be created from burned tokens
     string public baseTokenURI;
     bool public isMigrationActive;
 
@@ -123,6 +123,25 @@ contract GmV2 is ERC721, IERC1155Receiver, IERC2981, Ownable, ReentrancyGuard {
 
         // Mint v2 token
         _safeMint(msg.sender, newItemId);
+    }
+
+    /**
+     * @dev Mints a batch of special edition 1/1 gm v2 ERC-721 tokens.
+     * @dev Only callable by the owner.
+     */
+    function upgradeSpecialBatch(uint256 qty) external onlyOwner nonReentrant {
+        require((getTotalTokenCount() + qty) <= maxSupply, "MAX_TOTAL_SUPPLY");
+        require((getSpecialTokenCount() + qty) <= maxSpecialTokens, "MAX_SPECIAL_SUPPLY");
+
+        for (uint256 i = 0; i < qty; i++) {
+            uint256 newItemId = nextSpecialTokenId;
+
+            // Update state
+            nextSpecialTokenId += 1;
+
+            // Mint v2 token
+            _safeMint(msg.sender, newItemId);
+        }
     }
 
     // ☉☉☉ RECEIVE FUNCTIONS ☉☉☉
