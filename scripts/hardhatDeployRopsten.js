@@ -1,8 +1,5 @@
 const gmDaoMetadataURI = "https://gmdao.ai/metadata/";
-const raribleContractAddress = "0xd07dc4262BCDbf85190C01c996b4C06a461d2430";
-
-// Deploy: npx hardhat run --network mainnet scripts/hardhatDeploy.js
-// Verify on Etherscan: npx hardhat verify --network mainnet CONTRACT_ADDRESS "constructor_arg_1" "constructor_arg_2" ...
+const ropstenV1ContractAddress = "0x776a46cCB1629dD11B08fe7fb70e5164e7393f2a";
 
 async function main() {
 	const [deployer] = await ethers.getSigners();
@@ -17,8 +14,8 @@ async function main() {
 	// We get the contract to deploy
 	const GmV2Contract = await ethers.getContractFactory('GmV2');
 	const gmv2 = await GmV2Contract.deploy(
-		gmDaoMetadataURI, // baseURI
-		raribleContractAddress // raribleAddress
+		gmDaoMetadataURI,
+		ropstenV1ContractAddress
 	);
   
 	console.log('DEPLOYED TO: ', gmv2.address);
