@@ -1,38 +1,39 @@
-import { ethers } from "ethers";
-import TestTokenABI from "../contracts/collections/test/Test.sol/TestToken.json";
+import { Contract, ethers } from "ethers";
 import { idToNetwork, Network, NETWORK_LOCAL, NETWORK_MAINNET, NETWORK_ROPSTEN } from "./connector";
+import gmv2 from "./GmV2.json";
+import rarible from "./rarible.json";
 
 const NotImplemented = "0x0000000000000000000000000000000000000000";
 
-export const TEST_CONTRACT_NAME = "contract_test";
-
-const TokenContracts = [TEST_CONTRACT_NAME] as const;
-type Contract = typeof TokenContracts[number];
-
-type ContractMap = Record<Contract, ethers.Contract>;
-
-export const TEST_CONTRACT_ADDRESS: Record<Network, string> = {
+export const GMV2_ADDRESSES: Record<Network, string> = {
   [NETWORK_MAINNET]: NotImplemented,
-  [NETWORK_LOCAL]: "0x5fbdb2315678afecb367f032d93f642f64180aa3",
-  [NETWORK_ROPSTEN]: "0x1aE18815df3f418E086A44FF7C12b0F692f88B45",
+  [NETWORK_LOCAL]: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+  [NETWORK_ROPSTEN]: NotImplemented,
 };
 
-// TODO: Memoize or use
-export const getContracts = (
+export const RARIBLE_ADDRESSES: Record<Network, string> = {
+  [NETWORK_MAINNET]: "0xd07dc4262bcdbf85190c01c996b4c06a461d2430",
+  [NETWORK_LOCAL]: NotImplemented,
+  [NETWORK_ROPSTEN]: NotImplemented,
+};
+
+export const getGMContractAddress = (chainId: number): string => {
+  const net = idToNetwork(chainId);
+  return GMV2_ADDRESSES[net];
+};
+
+export const getGMContract = (
   provider: ethers.providers.Provider | ethers.Signer,
   chainId: number = NETWORK_LOCAL
-): ContractMap => {
+): Contract => {
   const net = idToNetwork(chainId);
-  const TestTokenContract = new ethers.Contract(TEST_CONTRACT_ADDRESS[net], TestTokenABI.abi, provider);
-  return {
-    [TEST_CONTRACT_NAME]: TestTokenContract,
-  };
+  return new ethers.Contract(GMV2_ADDRESSES[net], gmv2.abi, provider);
 };
 
-export const getContract = (
+export const getRaribleContract = (
   provider: ethers.providers.Provider | ethers.Signer,
-  chainId: number = NETWORK_LOCAL,
-  contract: Contract
-): ethers.Contract => {
-  return getContracts(provider, chainId)[contract];
+  chainId: number = NETWORK_LOCAL
+): Contract => {
+  const net = idToNetwork(chainId);
+  return new ethers.Contract(RARIBLE_ADDRESSES[net], rarible, provider);
 };
