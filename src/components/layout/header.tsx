@@ -66,7 +66,7 @@ const Header = () => {
           </div>
 
           <Disclosure.Panel className="md:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 absolute top-15 right-0 ">
+            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 absolute top-15 right-0 backdrop-blur-[5px] rounded-md">
               {navigation.map((item) => {
                 return (
                   <Disclosure.Button

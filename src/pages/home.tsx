@@ -57,7 +57,7 @@ const Home = () => {
           </div>
         </div>
       </div>
-      <div id="about" className="max-w-6xl mx-auto py-6 pt-12 text-gray-800">
+      <div id="about" className="max-w-6xl mx-auto px-6 xl:px-0 py-6 pt-12 text-gray-800">
         <h1 className="text-2xl pb-6 font-semibold">The DAO</h1>
         <div className="space-y-4">
           <Para>
@@ -92,7 +92,7 @@ const Home = () => {
           The token
         </h1>
         <div>
-          <div className="grid grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <div className="space-y-4">
               <Para>
                 The gm. token is the key to gain access to our private community, but also acts as a governance token
