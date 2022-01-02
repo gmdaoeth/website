@@ -1,11 +1,10 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.2;
+pragma solidity >=0.8.0;
 
 /// @title gmDAO Token v2
 /// @notice Migration of gm token v1 from shared Rarible contract to v2 custom contract
 /// @author: 0xChaosbi.eth
 /// "Omnia sol temperat" - The sun warms all
-/// gmdao.ai
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                                                               //
@@ -39,31 +38,32 @@ import "@openzeppelin/contracts/interfaces/IERC2981.sol";
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
-import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
 contract GmV2 is ERC721, IERC1155Receiver, IERC2981, Ownable, ReentrancyGuard {
     using Strings for uint256;
-    using Counters for Counters.Counter;
 
-    Counters.Counter private _nextNormalTokenId;
-    Counters.Counter private _nextSpecialTokenId;
-
-    address public raribleContractAddress = 0xd07dc4262BCDbf85190C01c996b4C06a461d2430; // Rarible shared ERC-1155 contract
+    address public raribleContractAddress = 0xd07dc4262BCDbf85190C01c996b4C06a461d2430; // shared Rarible ERC-1155 contract address
     uint256 public raribleTokenId = 706480; // gm v1 token id on shared Rarible contract
     address public gmDAOAddress = 0xD18e205b41eEe3D208D3B10445DB95Ff02ba4acA; // gmdao.eth
-    uint256 public maxSupply = 899; // Total of all normal and special 1/1 tokens minus 100 burned tokens
-    uint256 public maxNormalTokens = 836; // 836 normal tokens in circulation
-    uint256 public maxSpecialTokens = 63; // 63 possible special 1/1 tokens
+    uint256 public royaltyPercent = 90; // 90%
+    uint256 public maxSupply = 900;
+    uint256 public maxNormalTokens = 870; // v2 tokens that correspond directly to existing v1 tokens
+    uint256 public maxSpecialTokens = 30; // special edition 1/1 tokens that can be created from burned tokens
     string public baseTokenURI;
     bool public isMigrationActive;
 
-    // @dev When a gm dao member sends their v1 token to this contract, we record that.
-    mapping(address => uint256) private _sentV1Tokens;
+    // @dev Using special counter functions due to token id requirements for special tokens
+    uint256 public nextNormalTokenId = 0;
+    uint256 public nextSpecialTokenId = maxSupply - maxSpecialTokens;
 
-    constructor(string memory baseURI) ERC721("gmDAO Token v2", "GMV2") {
+    // @dev When a gm dao member sends their v1 token to this contract, we record that.
+    mapping(address => uint256) public sentV1Tokens;
+
+    constructor(string memory baseURI, address raribleAddress) ERC721("gmDAO Token v2", "GMV2") {
         baseTokenURI = string(abi.encodePacked(baseURI));
+        raribleContractAddress = raribleAddress;
     }
 
     // ☉☉☉ MINT FUNCTIONS ☉☉☉
@@ -73,16 +73,17 @@ contract GmV2 is ERC721, IERC1155Receiver, IERC2981, Ownable, ReentrancyGuard {
      * @dev Requires user to have transferred their Rarible ERC-1155 gm v1 token to this contract first.
      */
     function upgradeToken() external migrationActive nonReentrant {
-        require((_nextNormalTokenId.current() + _nextSpecialTokenId.current()) < maxSupply, "MAX_TOTAL_SUPPLY");
-        require(_nextNormalTokenId.current() < maxNormalTokens, "MAX_NORMAL_SUPPLY");
-        // Requires that the minter has sent their v1 token and we have recorded that in _sentV1Tokens
-        require(_sentV1Tokens[msg.sender] > 0, "NO_V1");
+        require(getTotalTokenCount() < maxSupply, "MAX_TOTAL_SUPPLY");
+        require(nextNormalTokenId < maxNormalTokens, "MAX_NORMAL_SUPPLY");
 
-        uint256 newItemId = _nextNormalTokenId.current();
+        // Requires that the minter has sent their v1 token and we have recorded that in sentV1Tokens
+        require(sentV1Tokens[msg.sender] > 0, "NO_V1");
+
+        uint256 newItemId = nextNormalTokenId;
 
         // Update state
-        _nextNormalTokenId.increment();
-        _sentV1Tokens[msg.sender] -= 1;
+        nextNormalTokenId += 1;
+        sentV1Tokens[msg.sender] -= 1;
 
         // Mint v2 token
         _safeMint(msg.sender, newItemId);
@@ -93,14 +94,14 @@ contract GmV2 is ERC721, IERC1155Receiver, IERC2981, Ownable, ReentrancyGuard {
      * @dev Only callable by the owner.
      */
     function upgradeBatch(uint256 qty) external onlyOwner nonReentrant {
-        require(((_nextNormalTokenId.current() + qty) + _nextSpecialTokenId.current()) < maxSupply, "MAX_TOTAL_SUPPLY");
-        require((_nextNormalTokenId.current() + qty) < maxNormalTokens, "MAX_NORMAL_SUPPLY");
+        require((getTotalTokenCount() + qty) <= maxSupply, "MAX_TOTAL_SUPPLY");
+        require((getNormalTokenCount() + qty) <= maxNormalTokens, "MAX_NORMAL_SUPPLY");
 
         for (uint256 i = 0; i < qty; i++) {
-            uint256 newItemId = _nextNormalTokenId.current();
+            uint256 newItemId = nextNormalTokenId;
 
             // Update state
-            _nextNormalTokenId.increment();
+            nextNormalTokenId += 1;
 
             // Mint v2 token
             _safeMint(msg.sender, newItemId);
@@ -112,17 +113,35 @@ contract GmV2 is ERC721, IERC1155Receiver, IERC2981, Ownable, ReentrancyGuard {
      * @dev Only callable by the owner.
      */
     function upgradeSpecialToken() public onlyOwner nonReentrant {
-        require((_nextNormalTokenId.current() + _nextSpecialTokenId.current()) < maxSupply, "MAX_TOTAL_SUPPLY");
-        require(_nextSpecialTokenId.current() < maxSpecialTokens, "MAX_SPECIAL_SUPPLY");
+        require(getTotalTokenCount() < maxSupply, "MAX_TOTAL_SUPPLY");
+        require(getSpecialTokenCount() < maxSpecialTokens, "MAX_SPECIAL_SUPPLY");
 
-        uint256 newItemId = _nextSpecialTokenId.current();
+        uint256 newItemId = nextSpecialTokenId;
 
         // Update state
-        _nextSpecialTokenId.increment();
-        _sentV1Tokens[msg.sender] -= 1;
+        nextSpecialTokenId += 1;
 
         // Mint v2 token
         _safeMint(msg.sender, newItemId);
+    }
+
+    /**
+     * @dev Mints a batch of special edition 1/1 gm v2 ERC-721 tokens.
+     * @dev Only callable by the owner.
+     */
+    function upgradeSpecialBatch(uint256 qty) external onlyOwner nonReentrant {
+        require((getTotalTokenCount() + qty) <= maxSupply, "MAX_TOTAL_SUPPLY");
+        require((getSpecialTokenCount() + qty) <= maxSpecialTokens, "MAX_SPECIAL_SUPPLY");
+
+        for (uint256 i = 0; i < qty; i++) {
+            uint256 newItemId = nextSpecialTokenId;
+
+            // Update state
+            nextSpecialTokenId += 1;
+
+            // Mint v2 token
+            _safeMint(msg.sender, newItemId);
+        }
     }
 
     // ☉☉☉ RECEIVE FUNCTIONS ☉☉☉
@@ -137,13 +156,13 @@ contract GmV2 is ERC721, IERC1155Receiver, IERC2981, Ownable, ReentrancyGuard {
         address,
         address from,
         uint256 id,
-        uint256,
-        bytes memory
-    ) external override nonReentrant returns (bytes4) {
+        uint256 amount,
+        bytes calldata
+    ) external override migrationActive nonReentrant returns (bytes4) {
         require(msg.sender == address(raribleContractAddress), "WRONG_NFT_CONTRACT");
         require(id == raribleTokenId, "ONLY_GM");
 
-        _sentV1Tokens[from] += 1;
+        sentV1Tokens[from] += amount;
 
         return bytes4(keccak256("onERC1155Received(address,address,uint256,uint256,bytes)"));
     }
@@ -159,20 +178,32 @@ contract GmV2 is ERC721, IERC1155Receiver, IERC2981, Ownable, ReentrancyGuard {
         uint256[] calldata ids,
         uint256[] calldata values,
         bytes memory
-    ) external override returns (bytes4) {
+    ) external override migrationActive nonReentrant returns (bytes4) {
         require(msg.sender == address(raribleContractAddress), "WRONG_NFT_CONTRACT");
         require(ids[0] == raribleTokenId, "ONLY_GM");
-        require(ids.length == 1);
+        require(ids.length == 1, "ONLY_GM");
 
-        _sentV1Tokens[from] += values[0];
+        sentV1Tokens[from] += values[0];
 
         return bytes4(keccak256("onERC1155BatchReceived(address,address,uint256[],uint256[],bytes)"));
     }
 
     // ☉☉☉ ADMIN ACTIONS ☉☉☉
 
-    function setBaseURI(string memory _uri) external onlyOwner {
-        baseTokenURI = _uri;
+    function setBaseURI(string memory uri) external onlyOwner {
+        baseTokenURI = uri;
+    }
+
+    function setRoyaltyPercent(uint256 percent) external onlyOwner {
+        royaltyPercent = percent;
+    }
+
+    function setRaribleContractAddress(address raribleAddress) external onlyOwner {
+        raribleContractAddress = raribleAddress;
+    }
+
+    function setRaribleTokenId(uint256 tokenId) external onlyOwner {
+        raribleTokenId = tokenId;
     }
 
     /**
@@ -191,28 +222,16 @@ contract GmV2 is ERC721, IERC1155Receiver, IERC2981, Ownable, ReentrancyGuard {
 
     // ☉☉☉ PUBLIC VIEW FUNCTIONS ☉☉☉
 
-    function getTotalTokenCount() public view returns (uint256) {
-        return _nextNormalTokenId.current() + _nextSpecialTokenId.current();
-    }
-
     function getNormalTokenCount() public view returns (uint256) {
-        return _nextNormalTokenId.current();
+        return nextNormalTokenId;
     }
 
     function getSpecialTokenCount() public view returns (uint256) {
-        return _nextSpecialTokenId.current();
+        return nextSpecialTokenId - (maxSupply - maxSpecialTokens);
     }
 
-    function getSupply() public view returns (uint256) {
-        return maxSupply;
-    }
-
-    function getBaseURI() external view returns (string memory) {
-        return baseTokenURI;
-    }
-
-    function getAvailableMintsForAddress(address addr) public view returns (uint256) {
-        return _sentV1Tokens[addr];
+    function getTotalTokenCount() public view returns (uint256) {
+        return getNormalTokenCount() + getSpecialTokenCount();
     }
 
     /**
@@ -227,7 +246,8 @@ contract GmV2 is ERC721, IERC1155Receiver, IERC2981, Ownable, ReentrancyGuard {
     // ☉☉☉ ROYALTIES ☉☉☉
 
     /**
-     * @dev See {IERC165-royaltyInfo}. Sets a 90% royalty on the token to discourage resales.
+     * @dev See {IERC165-royaltyInfo}.
+     * @dev Sets a 90% royalty on the token to discourage resales.
      */
     function royaltyInfo(uint256 tokenId, uint256 salePrice)
         external
@@ -237,7 +257,7 @@ contract GmV2 is ERC721, IERC1155Receiver, IERC2981, Ownable, ReentrancyGuard {
     {
         require(_exists(tokenId), "NONEXISTENT_TOKEN");
 
-        return (address(gmDAOAddress), SafeMath.div(SafeMath.mul(salePrice, 90), 100));
+        return (address(gmDAOAddress), SafeMath.div(SafeMath.mul(salePrice, royaltyPercent), 100));
     }
 
     function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721, IERC165) returns (bool) {
