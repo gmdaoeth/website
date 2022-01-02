@@ -1,27 +1,27 @@
 {
   "files": {
-    "main.css": "/static/css/main.39d65b33.chunk.css",
-    "main.js": "/static/js/main.300ce09e.chunk.js",
-    "main.js.map": "/static/js/main.300ce09e.chunk.js.map",
+    "main.css": "/static/css/main.1042d704.chunk.css",
+    "main.js": "/static/js/main.38ec899d.chunk.js",
+    "main.js.map": "/static/js/main.38ec899d.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.0dc564d2.js",
     "runtime-main.js.map": "/static/js/runtime-main.0dc564d2.js.map",
     "static/js/2.e0580aa2.chunk.js": "/static/js/2.e0580aa2.chunk.js",
     "static/js/2.e0580aa2.chunk.js.map": "/static/js/2.e0580aa2.chunk.js.map",
     "index.html": "/index.html",
-    "static/css/main.39d65b33.chunk.css.map": "/static/css/main.39d65b33.chunk.css.map",
+    "static/css/main.1042d704.chunk.css.map": "/static/css/main.1042d704.chunk.css.map",
     "static/js/2.e0580aa2.chunk.js.LICENSE.txt": "/static/js/2.e0580aa2.chunk.js.LICENSE.txt",
-    "static/media/fjall.baac3f8f.png": "/static/media/fjall.baac3f8f.png",
     "static/media/index.css": "/static/media/georgia.fdad852e.ttf",
     "static/media/gm1.a1d457a1.jpeg": "/static/media/gm1.a1d457a1.jpeg",
     "static/media/gm2.4c1c73a3.jpeg": "/static/media/gm2.4c1c73a3.jpeg",
     "static/media/gmnew1.355039b3.jpeg": "/static/media/gmnew1.355039b3.jpeg",
     "static/media/gmnew2.a975c9ae.jpeg": "/static/media/gmnew2.a975c9ae.jpeg",
-    "static/media/gmnew3.f112affd.jpeg": "/static/media/gmnew3.f112affd.jpeg"
+    "static/media/gmnew3.f112affd.jpeg": "/static/media/gmnew3.f112affd.jpeg",
+    "static/media/hero2.94efc87e.png": "/static/media/hero2.94efc87e.png"
   },
   "entrypoints": [
     "static/js/runtime-main.0dc564d2.js",
     "static/js/2.e0580aa2.chunk.js",
-    "static/css/main.39d65b33.chunk.css",
-    "static/js/main.300ce09e.chunk.js"
+    "static/css/main.1042d704.chunk.css",
+    "static/js/main.38ec899d.chunk.js"
   ]
 }
