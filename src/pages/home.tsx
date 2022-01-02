@@ -34,7 +34,7 @@ const Home = () => {
         <div className="max-w-7xl h-full mx-auto pb-20 sm:px-6 lg:px-8 text-center">
           <div className="text-gray-50 h-4/5 mt-12">
             <div
-              className="max-h-[128px] md:max-h-[256px] lg:max-h-[512px] flex justify-center relative"
+              className="max-h-[128px] md:max-h-[256px] lg:max-h-[512px] ml-20 mr-20 flex justify-center relative"
               onClick={changeMode}
             >
               <div className="absolute top-[32px] md:top-[64px] lg:top-[128px] flex">
