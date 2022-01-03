@@ -25,6 +25,7 @@ const steps = [
 const Migrate = () => {
   const web3React = useWeb3React<Web3Provider>();
   const [isLoading, setIsLoading] = useState(false);
+  const [isPendingTx, setIsPendingTx] = useState(false);
 
   // Wallet details
   const [address, setAddress] = useState("");
@@ -85,7 +86,7 @@ const Migrate = () => {
     const gm = getGMContract(provider, web3React.chainId);
     try {
       setIsLoading(true);
-      const available = await gm.getAvailableMintsForAddress(web3React.account);
+      const available = await gm.sentV1Tokens(web3React.account);
       setAvailableMints(available.toNumber());
     } catch (err) {
       console.error(err);
@@ -104,6 +105,7 @@ const Migrate = () => {
     const rarible = getRaribleContract(signer, web3React.chainId);
     try {
       setIsLoading(true);
+      setIsPendingTx(true);
       const tx = await rarible.safeTransferFrom(
         web3React.account,
         getGMContractAddress(web3React.chainId!),
@@ -117,10 +119,30 @@ const Migrate = () => {
       console.error(err);
     } finally {
       setIsLoading(false);
+      setIsPendingTx(false);
     }
   }
 
-  async function doMintToken() {}
+  async function doMintToken() {
+    if (typeof web3React.library === "undefined") {
+      return;
+    }
+    const provider = new ethers.providers.Web3Provider(web3React.library.provider);
+    const signer = provider.getSigner();
+    const gm = getGMContract(signer, web3React.chainId);
+    try {
+      setIsLoading(true);
+      setIsPendingTx(true);
+      const tx = await gm.upgradeToken();
+      await tx.wait();
+      setCurrentStep(STEPS.COMPLETE);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsPendingTx(false);
+      setIsLoading(false);
+    }
+  }
 
   useEffect(() => {
     if (web3React.account) {
@@ -130,6 +152,7 @@ const Migrate = () => {
     loadAvailableMints();
 
     // Tokens to mint, go to mint page.
+    console.log({ availableMints });
     if (availableMints !== 0) {
       setCurrentStep(STEPS.MINT);
       return;
@@ -139,7 +162,7 @@ const Migrate = () => {
     if (currentStep === 1) {
       loadGMBalance();
     }
-  }, [web3React, currentStep]);
+  }, [web3React, currentStep, availableMints]);
 
   const ConnectWallet = () => {
     return (
@@ -150,17 +173,6 @@ const Migrate = () => {
   };
 
   const TransferToken = () => {
-    if (gmTokenAmount > 1) {
-      return (
-        <div>
-          <p>You have {gmTokenAmount} gm token(s)</p>
-          <p>
-            We don't support migrating multiple tokens through the website. Please contact Willyham in Discord to
-            migrate.
-          </p>
-        </div>
-      );
-    }
     if (gmTokenAmount === 0) {
       return (
         <div className="text-red-600">
@@ -176,7 +188,7 @@ const Migrate = () => {
     }
     return (
       <div>
-        <p className="mb-4">You have {gmTokenAmount} gm token to migrate.</p>
+        <p className="mb-4">You have {gmTokenAmount} gm token(s) to migrate.</p>
         <div onClick={doTransfer}>
           <BrandButton text="Transfer your token" />
         </div>
@@ -187,10 +199,10 @@ const Migrate = () => {
   const MintToken = () => {
     if (availableMints >= 1) {
       return (
-        <div>
-          <p>You have {availableMints} tokens available to mint.</p>
+        <div className="space-y-4">
+          <p>You have {availableMints} token(s) available to mint.</p>
           <div onClick={doMintToken}>
-            <BrandButton text="Transfer your token" />
+            <BrandButton text="Mint your token" />
           </div>
         </div>
       );
@@ -203,7 +215,7 @@ const Migrate = () => {
   };
 
   const Complete = () => {
-    return <div>Complete!</div>;
+    return <div>Mint complete! gm.</div>;
   };
 
   if (web3React.error && web3React.error instanceof UnsupportedChainIdError) {
@@ -270,7 +282,15 @@ const Migrate = () => {
       </div>
       <div className="bg-gray-50 rounded-md p-8 text-gray-900 shadow-lg">
         {address && <p className="text-sm mb-4">Connected as {address}</p>}
-        {isLoading ? <p className="text-sm mb-4">Loading...</p> : getStep()}
+        {isLoading ? (
+          isPendingTx ? (
+            <p className="text-sm mb-4">Waiting for transaction to complete...</p>
+          ) : (
+            <p className="text-sm mb-4">Loading...</p>
+          )
+        ) : (
+          getStep()
+        )}
       </div>
     </div>
   );

@@ -7,14 +7,14 @@ const NotImplemented = "0x0000000000000000000000000000000000000000";
 
 export const GMV2_ADDRESSES: Record<Network, string> = {
   [NETWORK_MAINNET]: NotImplemented,
+  [NETWORK_ROPSTEN]: "0xAE08520582B8CAB06c856DC6348C604895eCB1f7",
   [NETWORK_LOCAL]: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
-  [NETWORK_ROPSTEN]: NotImplemented,
 };
 
 export const RARIBLE_ADDRESSES: Record<Network, string> = {
   [NETWORK_MAINNET]: "0xd07dc4262bcdbf85190c01c996b4c06a461d2430",
+  [NETWORK_ROPSTEN]: "0x776a46cCB1629dD11B08fe7fb70e5164e7393f2a",
   [NETWORK_LOCAL]: NotImplemented,
-  [NETWORK_ROPSTEN]: NotImplemented,
 };
 
 export const getGMContractAddress = (chainId: number): string => {
