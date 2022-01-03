@@ -11,7 +11,13 @@ const MigrateInfo = () => {
       <div className="mb-8 space-y-4">
         <h1 className="font-bold text-2xl">Token migration</h1>
         <p>We are migrating our DAO token from the exisitng Rarible contract, to a brand new custom contract.</p>
-        <p>Your new token will have generative artwork created by Rich Poole. Here are some examples:</p>
+        <p>
+          Your new token will have generative artwork created by{" "}
+          <a className="italic" href="https://twitter.com/rich__poole">
+            Rich Poole
+          </a>
+          . Here are some examples:
+        </p>
         <div className="flex justify-between space-x-12">
           <div className="shadow-lg">
             <img className="bg-contain" src={gm2}></img>

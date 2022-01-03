@@ -1,18 +1,20 @@
 import { Disclosure } from "@headlessui/react";
 import { MenuIcon, XIcon, ExternalLinkIcon } from "@heroicons/react/outline";
 import AnchorLink from "react-anchor-link-smooth-scroll";
+import { Link } from "react-router-dom";
 
 type NavItem = {
   name: string;
   href: string;
   external?: boolean;
+  router?: boolean;
 };
 
 const navigation: NavItem[] = [
   { name: "About", href: "#about" },
   { name: "Token", href: "#token" },
   // { name: "Studio", href: "https://studio.gmdao.ai", external: true },
-  { name: "Studio", href: "#projects" },
+  { name: "Migrate Token", href: "/migrate-info", router: true },
 ];
 
 const Header = () => {
@@ -36,6 +38,13 @@ const Header = () => {
                               <ExternalLinkIcon width={16} height={16} />
                             </div>
                           </div>
+                        );
+                      }
+                      if (item.router) {
+                        return (
+                          <Link className="hover:text-shadow-sm hover:text-gray-300" to={item.href}>
+                            {item.name}
+                          </Link>
                         );
                       }
                       return (
