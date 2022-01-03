@@ -75,14 +75,14 @@ const Header = () => {
           </div>
 
           <Disclosure.Panel className="md:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 absolute top-15 right-0 backdrop-blur-[5px] rounded-md">
+            <div className="max-w-[25%] px-2 pt-2 pb-3 space-y-1 sm:px-3 absolute top-15 right-0 backdrop-blur-[5px] rounded-md">
               {navigation.map((item) => {
                 return (
                   <Disclosure.Button
                     key={item.name}
                     as="a"
                     href={item.href}
-                    className="text-white hover:bg-gray-70 block px-3 py-2 rounded-md text-base font-medium"
+                    className="text-white hover:bg-gray-70 block pr-3 py-2 rounded-md text-base text-right font-medium"
                   >
                     {item.name}
                   </Disclosure.Button>
