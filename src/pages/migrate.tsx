@@ -29,12 +29,12 @@ const Migrate = () => {
 
   // Wallet details
   const [address, setAddress] = useState("");
-  const [hasResolvedAddress, setHasResolvedAddress] = useState(false);
 
   // State and balances.
   const [currentStep, setCurrentStep] = useState(0);
   const [gmTokenAmount, setGmTokenAmount] = useState(0);
   const [availableMints, setAvailableMints] = useState(0);
+  const [newGmTokenAmount, setNewGmTokenAmount] = useState(0);
 
   const connectWallet = async () => {
     await web3React.activate(injectedConnector);
@@ -50,9 +50,6 @@ const Migrate = () => {
   const resolveAddress = async (addr: string): Promise<void> => {
     try {
       const res = await web3React.library?.lookupAddress(addr);
-      if (res) {
-        setHasResolvedAddress(true);
-      }
       setAddress(res || addr);
     } catch (e) {
       setAddress(addr);
@@ -71,8 +68,27 @@ const Migrate = () => {
       setGmTokenAmount(data.toNumber());
     } catch (err) {
       console.error(err);
-      // Gtoss but it'll do for now.
+      // Gross but it'll do for now.
       setGmTokenAmount(-1);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  async function loadNewGMBalance() {
+    if (typeof web3React.library === "undefined") {
+      return;
+    }
+    const provider = new ethers.providers.Web3Provider(web3React.library.provider);
+    const gm = getGMContract(provider, web3React.chainId);
+    try {
+      setIsLoading(true);
+      const data = await gm.balanceOf(web3React.account);
+      setNewGmTokenAmount(data.toNumber());
+    } catch (err) {
+      console.error(err);
+      // Gross but it'll do for now.
+      setNewGmTokenAmount(-1);
     } finally {
       setIsLoading(false);
     }
@@ -150,11 +166,16 @@ const Migrate = () => {
       setCurrentStep(STEPS.TRANSFER);
     }
     loadAvailableMints();
+    loadNewGMBalance();
 
     // Tokens to mint, go to mint page.
-    console.log({ availableMints });
     if (availableMints !== 0) {
       setCurrentStep(STEPS.MINT);
+      return;
+    }
+
+    if (newGmTokenAmount > 0 && gmTokenAmount === 0) {
+      setCurrentStep(STEPS.COMPLETE);
       return;
     }
 
@@ -162,7 +183,7 @@ const Migrate = () => {
     if (currentStep === 1) {
       loadGMBalance();
     }
-  }, [web3React, currentStep, availableMints]);
+  }, [web3React, currentStep, availableMints, gmTokenAmount, newGmTokenAmount]);
 
   const ConnectWallet = () => {
     return (
@@ -215,7 +236,11 @@ const Migrate = () => {
   };
 
   const Complete = () => {
-    return <div>Mint complete! gm.</div>;
+    return (
+      <div>
+        Mint complete! gm. You will be able to view your token on OpenSea, but it may take a few minutes to display.
+      </div>
+    );
   };
 
   if (web3React.error && web3React.error instanceof UnsupportedChainIdError) {
@@ -243,6 +268,8 @@ const Migrate = () => {
         return <div>Unknown step</div>;
     }
   };
+
+  // const displayAddress = hasResolvedAddress ?
 
   return (
     <div className="max-w-7xl h-full mx-auto pb-20 sm:px-6 lg:px-8 text-gray-900 mt-12">
