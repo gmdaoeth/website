@@ -197,8 +197,8 @@ const Migrate = () => {
     if (gmTokenAmount === 0) {
       return (
         <div className="text-red-600">
-          It doesn't look like you have any gm tokens to migrate. If you think this is wrong, please contact Willyham in
-          Discord.
+          It doesn't look like you have any gm tokens to migrate. If you think this is wrong, please post in
+          #migraton-support in Discord.
         </div>
       );
     }
