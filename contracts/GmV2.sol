@@ -44,10 +44,10 @@ import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 contract GmV2 is ERC721, IERC1155Receiver, IERC2981, Ownable, ReentrancyGuard {
     using Strings for uint256;
 
-    address public raribleContractAddress = 0xd07dc4262BCDbf85190C01c996b4C06a461d2430; // shared Rarible ERC-1155 contract address
+    address public raribleContractAddress; // shared Rarible ERC-1155 contract address
     uint256 public raribleTokenId = 706480; // gm v1 token id on shared Rarible contract
     address public gmDAOAddress = 0xD18e205b41eEe3D208D3B10445DB95Ff02ba4acA; // gmdao.eth
-    uint256 public royaltyPercent = 90; // 90%
+    uint256 public royaltyPercent = 20; // 20%
     uint256 public maxSupply = 900;
     uint256 public maxNormalTokens = 870; // v2 tokens that correspond directly to existing v1 tokens
     uint256 public maxSpecialTokens = 30; // special edition 1/1 tokens that can be created from burned tokens
