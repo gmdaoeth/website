@@ -6,7 +6,7 @@ import rarible from "./rarible.json";
 const NotImplemented = "0x0000000000000000000000000000000000000000";
 
 export const GMV2_ADDRESSES: Record<Network, string> = {
-  [NETWORK_MAINNET]: NotImplemented,
+  [NETWORK_MAINNET]: "0x36f4d96fe0d4eb33cdc2dc6c0bca15b9cdd0d648",
   [NETWORK_ROPSTEN]: "0xAE08520582B8CAB06c856DC6348C604895eCB1f7",
   [NETWORK_LOCAL]: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
 };
