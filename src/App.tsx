@@ -1,6 +1,5 @@
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/home";
-import Soon from "./pages/soon";
 import Migrate from "./pages/migrate";
 import MigrateInfo from "./pages/migrate-info";
 import { SocialIcon } from "react-social-icons";
@@ -10,8 +9,7 @@ function App() {
     <div className="w-full min-h-full h-screen">
       <main className="w-full min-h-full pb-12">
         <Routes>
-          <Route path="/" element={<Soon />} />
-          <Route path="/wip" element={<Home />} />
+          <Route path="/" element={<Home />} />
           <Route path="/migrate" element={<Migrate />} />
           <Route path="/migrate-info" element={<MigrateInfo />} />
         </Routes>
