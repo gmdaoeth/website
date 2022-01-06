@@ -245,7 +245,7 @@ describe("GM v2", function () {
 
     it("gets the correct royalty information for a sale", async function () {
       const salePriceInEth = 10;
-      const expectedRoyaltyAmountInEth = 9;
+      const expectedRoyaltyAmountInEth = 2;
       const royaltyInfo = await contract.royaltyInfo(0, salePriceInEth);
       expect(royaltyInfo.receiver).to.equal(gmdaoaddress);
       expect(royaltyInfo.royaltyAmount.toNumber()).to.equal(expectedRoyaltyAmountInEth);
