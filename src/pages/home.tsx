@@ -135,8 +135,10 @@ const Home = () => {
             resources within the community & will serve as our primary mechanism to generate treasury funds.
           </Para>
           <div className="bg-gray-900 rounded-md p-8 text-white shadow-lg">
-            <div className="text-3xl">1. gm. studio</div>
-            <div className="text-sm text-gray-300 mb-8">Launching circa Jan 2022</div>
+            <div className="text-3xl cursor-pointer">
+              <a href="https://gmstudio.art">gm. studio</a>
+            </div>
+            <div className="text-sm text-gray-300 mb-8">Launched Feb 2022</div>
             <div className="space-y-4">
               <Para>
                 Generative art launchpad built by artists for artists. We provide equal opportunity to each and every
@@ -145,6 +147,11 @@ const Home = () => {
                 present to new artists, namely; extremely long queues & poor communication.
               </Para>
               <Para>Our approach is clear & transparent, with fees & timelines presented upfront.</Para>
+              <a href="https://gmstudio.art">
+                <button className="mt-4 bg-gray-100 hover:bg-gray-200 text-gray-900 py-3 px-4 rounded-sm focus:outline-none focus:shadow-outline">
+                  Visit the Studio
+                </button>
+              </a>
             </div>
           </div>
         </div>
