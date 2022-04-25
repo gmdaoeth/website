@@ -111,7 +111,7 @@ const Home = () => {
                 programs which will begin early 2022.
               </Para>
               <div className="my-8 flex space-x-4">
-                <a href="https://opensea.io/assets/0xd07dc4262bcdbf85190c01c996b4c06a461d2430/706480" target="_blank">
+                <a href="https://opensea.io/collection/gm-token" target="_blank">
                   <BrandButton text="Get a token" />
                 </a>
                 <Link to="/migrate-info">
