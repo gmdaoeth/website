@@ -1,4 +1,4 @@
-const gmDaoMetadataURI = "https://gmdao.ai/metadata/";
+const gmDaoMetadataURI = "https://gmdao.org/metadata/";
 const raribleContractAddress = "0xd07dc4262BCDbf85190C01c996b4C06a461d2430";
 
 // Deploy: npx hardhat run --network mainnet scripts/hardhatDeploy.js
